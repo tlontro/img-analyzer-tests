@@ -1,0 +1,4 @@
+<% common = "-f pretty --tags ~@manual BROWSER=headless_chrome" %>
+<% report_options = "-f html -o cucumber-report/html/cucumber.html -f junit -o cucumber-report/junit" %>
+
+default: <%= common %> ENV_CONFIG=live DRIVER=local TYPE=reference

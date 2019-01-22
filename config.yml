@@ -1,0 +1,7 @@
+     #Enviornemnt which is used while doing integration
+defaults: &execution_defaults
+  default_config: live
+
+live:
+   <<: *execution_defaults
+   host_url: https://www.google.com

@@ -1,0 +1,37 @@
+default: &default_details
+  title: Mr
+  date_of_birth: 11
+  month_of_birth: 11
+  year_of_birth: 1987
+  gender: Male
+  phone_number: 9999999999
+
+closed_account:
+  <<: *default_details
+  sort_code: 56-00-36
+  account_number: 57607230
+  first_name: Debbie
+  last_name: Mann
+  house_number: 278 High St
+  town: Westbury, Wilts
+  postcode: BA133BN
+
+invalid_account:
+  <<: *default_details
+  sort_code: 07-01-16
+  account_number: 11111118
+  first_name: Karen
+  last_name: Tennant
+  house_number: 473 ROWLANDS CLOSE, BARNTON MILLS
+  town: TRAINING TOWN, ISLE OF SKYE
+  postcode: IV448TZ
+
+valid_account:
+  <<: *default_details
+  sort_code: 56-00-36
+  account_number: 40308669
+  first_name: David
+  last_name: Archer
+  house_number: 530 High St
+  town: Westbury, Wilts
+  postcode: BA133BN

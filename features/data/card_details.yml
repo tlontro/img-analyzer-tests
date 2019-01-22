@@ -1,0 +1,21 @@
+default: &default_details
+  expiry_month: 11
+  expiry_year: 2025
+  card_declined: 4111113333333333
+  card_uncertain: 4111116666666666
+  card_incompatible: 000000000000000
+
+american_express:
+  <<: *default_details
+  card_valid: 374111111111111
+  cvv: 1111
+
+mastercard:
+  <<: *default_details
+  card_valid: 5399999999999999
+  cvv: 111
+
+visa:
+  <<: *default_details
+  card_valid: 4111111111111111
+  cvv: 111

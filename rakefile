@@ -1,0 +1,81 @@
+require 'cucumber'
+require 'cucumber/rake/task'
+require_relative 'features/support/docker_helpers'
+
+container_name = "docker-selenium-healthscore-ci"
+
+namespace :docker do
+  desc "start docker image"
+  task :start do
+    ENV['DOCKER_CONTAINER']=`docker run -d -p 4444 --name docker-selenium-healthscore-ci selenium/standalone-firefox-debug`
+    puts "started #{ENV['DOCKER_CONTAINER']}"
+    ENV['DOCKER_CONTAINER_PORT']=`docker port $DOCKER_CONTAINER 4444 | awk -F: '{ print $2 }'`
+    puts "using port #{ENV['DOCKER_CONTAINER_PORT']}"
+    system "docker run -e PORTS=4444 --link #{container_name}:wait n3llyb0y/wait"
+  end
+
+  desc "start selenium container with debugging capabilities"
+  task :start_debug do
+    system "docker run -d -P --name #{container_name} selenium/standalone-firefox-debug"
+    host = DockerHelpers.docker_host
+    port = DockerHelpers.get_port(container_name, 5900)
+    puts "firefox server started with debugging capabilities"
+    puts "vnc://#{host}:#{port}"
+    puts "(password is \"secret\")"
+  end
+
+  desc "get the status of docker"
+  task :status do
+    system 'docker ps'
+  end
+
+  desc "stop docker"
+  task :stop do
+    puts "run: docker stop <container-id> && docker rm <container-id>"
+  end
+end
+
+Cucumber::Rake::Task.new(:cucumber) do |t|
+  t.cucumber_opts = "features --format pretty"
+end
+
+task :check_for_port do
+  unless ENV['DOCKER_CONTAINER_PORT']
+    puts "Please specify DOCKER_CONTAINER_PORT. e.g. bundle exec rake DOCKER_CONTAINER_PORT=32123"
+    exit 1
+  end
+end
+
+namespace :profile do
+
+  # how to run the test from terminal
+  # rake profile:dev
+  # rake profile:qa
+
+  def run_profile(profile_name)
+    sh "bundle exec cucumber -p #{profile_name}" do |ok, result|
+    # be empty to run all tests
+  end
+  end
+
+  desc 'Run all tests against dev environment'
+  task :dev do
+    run_profile('dev')
+  end
+
+  desc 'Run all tests against qa environment'
+  task :qa do
+    run_profile('qa')
+  end
+
+  task :uat do
+    run_profile('uat')
+  end
+
+  task :qanext do
+    run_profile('qanext')
+  end
+
+end
+
+task :default => [:check_for_port, :cucumber]

@@ -1,0 +1,13 @@
+different_images/
+reference_images/
+test_images/
+evidence/
+report.html
+.DS_store/
+.idea/
+.DS_store
+.byebug_history
+Gemfile.lock
+json_results/
+junit_reports/
+test_report.html
